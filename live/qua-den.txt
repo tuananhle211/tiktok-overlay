@@ -1,0 +1,36 @@
+# Quà nào thả kiểu đèn nào (chủ đề Đêm Hoa Đăng).
+# Mỗi dòng:  tên quà, tên quà khác, ... = kiểu đèn
+# Số trong ngoặc là giá xu (không bắt buộc: server tự lấy giá và icon quà từ danh mục quà TikTok).
+# Có thể dùng mã quà thay cho tên, ví dụ  #5655 = hoa-hong
+#
+# Tên quà là tên tiếng Anh như trong ứng dụng TikTok (không phân biệt hoa thường). Khi có người tặng thật,
+# Nhật ký ghi "🎁 ... tặng <tên quà> x1 (mã ..., ... xu)"; quà nào chưa khớp thì chép tên hoặc #mã vào đây.
+# Thứ tự các dòng ở đây cũng là thứ tự trên bảng "Tặng quà · Thả đèn" của overlay.
+# Sửa xong lưu lại là có hiệu lực sau vài giây, không cần khởi động lại.
+#
+# Kiểu đèn:
+#   den-giay   đèn giấy          hoa-sen    đèn hoa sen        den-troi   đèn trời bay lên
+#   hoa-hong   đèn hoa hồng      trai-tim   đèn trái tim       ong-sao    đèn ông sao
+#   long-tron  đèn lồng Hội An   con-heo    đèn heo may mắn    den-doi    đèn đôi
+#   phao-hoa   pháo hoa trên trời + một đèn giấy vàng
+#   mua-den    mưa đèn: thả cả chục đèn nhỏ khắp sông
+#
+# Quà không có trong danh sách: dưới 10 xu thả đèn giấy, 10–98 đèn hoa sen, từ 99 đèn trời.
+# Giá càng cao đèn càng to; từ 99 xu cả dòng sông lóe sáng. Tặng combo (×5…) thả thêm đèn nhỏ cùng kiểu.
+
+Rose (1) = hoa-hong
+Finger Heart (5) = trai-tim
+Perfume (20) = hoa-sen
+Confetti (100) = phao-hoa
+Galaxy (1000) = den-troi
+
+# Muốn dùng thêm: bỏ dấu # ở đầu dòng.
+# Rosa (10) = hoa-hong
+# Heart Me (1), little kisses (20), Hand Heart (100), Love Balloon (500) = trai-tim
+# Doughnut (30) = long-tron
+# Lucky Pig (10) = con-heo
+# Bouquet (100) = hoa-sen
+# Night Star (199) = ong-sao
+# Side by Side (199) = den-doi
+# Money Gun (500) = mua-den
+# You're awesome (1) = den-giay

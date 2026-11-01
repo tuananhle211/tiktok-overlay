@@ -21,17 +21,73 @@ npm start
 
 1. Mở `http://localhost:3000/live/control.html` (bảng điều khiển).
 2. Bấm **Mở màn hình overlay 9:16**, rồi bấm **Bật âm thanh** một lần trong cửa sổ đó (trình duyệt chặn tự phát tiếng).
-3. Trong TikTok LIVE Studio: *Add source → Window capture* → chọn cửa sổ overlay. Với OBS thì dùng *Browser source* trỏ tới `http://localhost:3000/live/overlay.html`, kích thước 1080×1920.
+3. Trong TikTok LIVE Studio: *Add source → Window capture* → chọn cửa sổ overlay. Với OBS thì dùng *Browser source* trỏ tới `http://localhost:3000/live/man-hinh`, kích thước 1080×1920. Địa chỉ này luôn hiện chủ đề đang chạy.
 4. Bật LIVE trên TikTok, nhập `@username` vào bảng điều khiển, bấm **Kết nối**.
 
 Chưa live vẫn thử được: dùng **Thử tương tác**, **Đổ người mẫu 15/36/64/100** hoặc **Bot mô phỏng**.
 
-### Người xem làm được gì
+### Nhiều chủ đề
+
+| Chủ đề | Mã | Overlay |
+|---|---|---|
+| Chánh Điện Tịnh Tâm (chánh điện, bồ đoàn, tụng kinh) | `chua` | `/live/overlay.html` |
+| Đêm Hoa Đăng (thả đèn trên sông đêm) | `hoadang` | `/live/hoadang.html` |
+| Khu Tam Thái Tử (châm biếm ổ lừa đảo) | `luadao` | `/live/luadao.html` |
+
+- **Chuyển chủ đề ngay khi đang chạy**: ô **🎭 Chủ đề** ở đầu bảng điều khiển. Không cần khởi động lại server, kết nối TikTok vẫn giữ. Cửa sổ overlay tự mở trang của chủ đề mới; bấm **Bật âm thanh** lại một lần.
+- **Server nhớ chủ đề dùng lần cuối** (file `live/chu-de.txt`). `npm start` mở lại đúng chủ đề đó; `npm run chua`, `npm run hoadang`, `npm run luadao` chọn thẳng.
+- **Một địa chỉ cho OBS / LIVE Studio**: `http://localhost:3000/live/man-hinh`, luôn hiện chủ đề đang chạy.
+- Cài đặt của mỗi chủ đề được giữ riêng: chuyển đi rồi chuyển lại không mất (cho tới khi tắt server).
+- Trên Windows, bấm đúp `start-live.bat` để mở cả server, bảng điều khiển và màn hình 9:16.
+
+**Thêm chủ đề mới**: tạo `live/themes/<mã>.mjs` (xem chú thích đầu `themes/chua.mjs` để biết cần trả về gì) và một trang overlay trong `live/`. Server tự nhận file mới khi khởi động, bảng điều khiển tự có tên chủ đề trong danh sách.
+
+### Người xem làm được gì (Chánh Điện)
 
 - **Bình luận bất kỳ**: được vào ngồi (tối đa 100 chỗ, chỗ ngồi tự mở rộng 24 → 36 → 64 → 100). Đầy chỗ thì người im lặng lâu nhất mà chưa tặng quà sẽ nhường chỗ.
 - **Bình luận đúng một từ** `nam`, `nữ`, `sư`, `ni`, `tiểu`, `bà`, `cao tăng`: đổi hình nhân vật. Câu "Nam mô A Di Đà Phật" không bị hiểu nhầm thành "nam".
 - **Tặng quà**: banner xướng tên, giọng đọc hồi hướng (lấy lời nguyện từ bình luận gần nhất của người đó nếu có), hiệu ứng theo giá trị quà, cộng điểm vào bảng Công Đức.
 - **Thả tim**: tim bay trên đầu nhân vật.
+
+### Người xem làm được gì (Đêm Hoa Đăng)
+
+- **Bình luận bất kỳ**: thả một chiếc đèn mang tên mình, lời bình luận hiện thành lời ước. Đèn trôi xa dần rồi tắt (mặc định 90 giây). Mỗi người một đèn trên sông: bình luận tiếp khi đèn còn trôi thì đèn sáng lên và đổi lời ước.
+- **Bình luận đúng một từ** `đỏ`, `vàng`, `hồng`, `xanh`, `tím`, `cam` (hoặc "màu đỏ", "đèn đỏ"): đổi màu đèn. Phải có dấu, nên "tim" (thả tim) hay "hong" (không) không bị hiểu nhầm.
+- **Tặng quà**: mỗi món quà thả một kiểu đèn riêng, ghi trong `live/qua-den.txt`. Mặc định: Rose → đèn hoa hồng, Finger Heart → đèn trái tim, Perfume → đèn hoa sen, Confetti → pháo hoa, Galaxy → đèn trời (các dòng khác như đèn ông sao, lồng Hội An, heo may mắn, đèn đôi, mưa đèn để sẵn dạng ghi chú, bỏ dấu `#` là dùng). Quà không có trong file: dưới 10 xu đèn giấy, 10–98 đèn hoa sen, từ 99 đèn trời. Giá càng cao đèn càng to, từ 99 xu cả dòng sông lóe sáng, tặng combo (×5…) thả thêm đèn nhỏ cùng kiểu. Có banner xướng tên, bảng **Đèn Sáng Nhất** và giọng đọc cảm ơn.
+- **Thả tim**: đom đóm bay lên từ đèn của người đó.
+- **Mỗi 5 phút** cả dòng sông sáng lên kèm một câu nhắc người mới cách thả đèn.
+
+Cảnh sông, trăng, bờ phố và đèn đều vẽ bằng code, không cần file hình. Trên sông có tối đa 40 đèn (chỉnh được 10–80); tên chỉ hiện ở đèn gần và không bao giờ chồng lên nhau, tối đa 3 lời ước cùng lúc. Mở `hoadang.html?debug=1` để xem số khung hình mỗi giây.
+
+### Người xem làm được gì (Khu Tam Thái Tử)
+
+Chủ đề **châm biếm, giả tưởng**: một phòng làm việc của ổ lừa đảo. Tên lấy theo một khu có thật ở Bavet (sát cửa khẩu Mộc Bài), nơi báo chí đưa tin nhiều người Việt bị dụ sang bằng lời hứa việc nhẹ lương cao rồi bị ép làm việc. Vì vậy dòng phụ ghi "Giả tưởng · Châm biếm", các "gói lừa" đều là chuyện phi lý (Bán đất Mặt Trăng, NFT gà biết hát…), và buổi họp giao ban mặc định xen lời nhắc cảnh giác lừa đảo thật (tắt được trong cài đặt). Nội dung kiểu này dễ bị TikTok xem là cổ súy lừa đảo hoặc buôn người; cân nhắc trước khi phát và tự chịu trách nhiệm như ở mục Miễn trừ trách nhiệm.
+
+- **Vào phòng live là vào ca**, không cần bình luận: tự ngồi vào một máy tính (tối đa 50 máy, chỉnh được 10–50). Kín chỗ thì người mới vào (hoặc người chưa có máy mà bình luận, tặng quà) thay chỗ người im lặng lâu nhất, người đó hiện "BỊ ĐUỔI!" rồi đi ra cửa. Bot và nhân viên mẫu luôn bị đuổi trước người thật.
+- **Im lặng 3 phút** (chỉnh được): gục đầu ngủ gật, "z z z" bay lên. Quản giáo đi xuống tận bàn, đứng cạnh, cầm loa hét **"DẬY LÀM VIỆC!"**; người đó giật mình, hiện ❗ và **thẻ vàng**, camera zoom vào, loa đọc "Nhân viên X ngủ gật trong giờ làm!". Bình luận, tặng quà hoặc thả tim là tỉnh và mất thẻ vàng. Mỗi lần đánh thức cách nhau ít nhất 15 giây, người thật trước bot; loa không gọi tên bot.
+- **Bình luận đúng một từ** `nam` / `nữ`: đổi kiểu tóc. Ai có ảnh đại diện TikTok thì mặt nhân vật là ảnh đó, đeo tai nghe tổng đài.
+- **Tặng quà**: chốt một "gói" ghi trong `live/qua-goi.txt`. Mỗi xu = 1 triệu "đồng lừa được" trên bảng **Lừa được nhiều nhất** và thanh KPI trên màn hình trung tâm. Có loa thông báo (chuông + giọng đọc), camera zoom vào người tặng, tiền bay; từ 99 xu có pháo hoa và cả phòng giơ tay ăn mừng. Vượt KPI thì cả phòng ăn mừng và lên ca mới (KPI ×1,5).
+- **Quà rẻ (mặc định Rose)**: ném gạch / dép vào quản giáo, combo ×5 ném 5 phát, mỗi phát 6–10 máu. Quản giáo hết máu thì gục, bị kéo ra ngoài, quản giáo khác lên thay. Máu quản giáo chỉnh được (mặc định 100).
+- **Quản giáo** đi tuần trước cửa sổ, thỉnh thoảng quát; **họp giao ban** định kỳ (mặc định 4 phút) kèm loa.
+- Bot vẫn có trên bảng xếp hạng nhưng tối đa 10 triệu (10 xu), không đẩy KPI quá phần đó.
+
+Cảnh phòng, cửa sổ song sắt nhìn ra thị trấn casino (biển neon chung chung, tường bao dây thép gai, chòi gác có đèn pha), bàn máy và nhân vật đều vẽ bằng code.
+
+### Quà nào thả đèn nào
+
+Sửa `live/qua-den.txt`, mỗi dòng `tên quà, tên quà khác = kiểu đèn`, lưu là có hiệu lực sau vài giây. Kiểu đèn: `den-giay`, `hoa-sen`, `den-troi`, `hoa-hong`, `trai-tim`, `ong-sao`, `long-tron`, `con-heo`, `den-doi`, `phao-hoa`, `mua-den`. Tên quà phải đúng như TikTok gửi về: khi có người tặng thật, Nhật ký ghi `🎁 <người> tặng <tên quà> x1 (mã …, … xu)`, chép tên (hoặc `#mã`) vào file. Dòng viết sai được báo trong Nhật ký kèm số dòng. Nút **Tặng thử** trong bảng điều khiển liệt kê đúng các quà trong file.
+
+Chủ đề Khu Tam Thái Tử dùng file riêng `live/qua-goi.txt` cùng cách viết; kiểu: `nem-gach`, `hoang-tu`, `nft-ga`, `khoa-hoc`, `meo-coin`, `dat-mat-trang`.
+
+Bảng **Tặng quà · Thả đèn** bên trái overlay hiện cùng lúc mọi dòng của file: icon quà TikTok → icon đèn và tên đèn; banner tặng quà cũng dùng icon thay cho tên quà. Icon lấy từ danh sách quà công khai của TikTok (không cần tài khoản), server tự tải khi chạy, lưu 3 ngày trong `live/gift-icons/` (thư mục này không đưa lên git vì là hình của TikTok). Máy không có mạng thì bảng hiện tên quà thay cho icon.
+
+### Lọc chữ
+
+Bật mặc định cho mọi chủ đề. Link, số điện thoại và các từ trong `live/tu-cam.txt` (mỗi dòng một từ) hiện thành `***` trong tên và bình luận. Sửa file rồi lưu là có hiệu lực sau vài giây, không cần khởi động lại.
+
+### Giọng đọc
+
+Dịch vụ đọc của Microsoft Edge hay từ chối giữa chừng, nên mỗi câu được thử tối đa 3 lần. Vẫn lỗi thì câu đó bị bỏ, ghi một dòng "TTS lỗi" trong Nhật ký; banner chữ trên màn hình vẫn hiện đầy đủ.
 
 ## Bảo mật
 
@@ -40,7 +96,7 @@ Dự án được viết để ai tải về chạy cũng an toàn mặc định
 - **Không dùng tài khoản TikTok.** Server chỉ đọc sự kiện công khai của phòng live theo username. Không cần, không hỏi và không lưu mật khẩu, cookie hay session. Không gửi tin nhắn thay bạn.
 - **Chỉ mở trên máy mình.** Server lắng nghe `127.0.0.1`, máy khác trong mạng hay Internet không truy cập được. Muốn mở ra ngoài phải tự đặt biến `HOST`. Không nên làm vậy khi chưa thêm đăng nhập.
 - **Chặn trang web lạ điều khiển.** WebSocket chỉ nhận kết nối từ chính trang của server (kiểm tra `Origin`), và header `Host` phải là localhost (chống DNS rebinding). Một trang web khác đang mở trong cùng trình duyệt không gửi được lệnh. Cửa sổ overlay chỉ nhận dữ liệu, không gửi lệnh được.
-- **File tĩnh có danh sách trắng.** Chỉ phục vụ `/assets` và `/live`. Chặn file ẩn (`.git`, `.env`), `node_modules`, mã server, `package.json` và mọi đường dẫn `../`.
+- **File tĩnh có danh sách trắng.** Chỉ phục vụ `/assets` và `/live`. Chặn file ẩn (`.git`, `.env`), `node_modules`, mã server và file chủ đề (`.mjs`), `package.json`, danh sách từ cấm (`.txt`) và mọi đường dẫn `../`.
 - **Không tin dữ liệu vào.** Tên người xem, bình luận và tên quà đều bị cắt độ dài. Cài đặt chỉ nhận đúng khóa, đúng kiểu, trong giới hạn. Văn bản đưa vào giọng đọc được escape XML. Mọi chữ trên màn hình vẽ bằng `textContent` hoặc canvas, không chèn HTML, nên bình luận chứa mã độc chỉ hiện ra như chữ thường.
 - **Chống spam.** Hàng đợi giọng đọc tối đa 15 câu. Bình luận thường không đọc thành tiếng.
 - **Phụ thuộc ghim phiên bản** trong `live/package.json`: `ws`, `msedge-tts`, `tiktok-live-connector`. Không có khóa API nào trong mã.

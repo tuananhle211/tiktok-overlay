@@ -3,16 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bảng điều khiển · Chánh Điện Tịnh Tâm</title>
+<title>Bảng điều khiển · Chánh Điện Online</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap">
 <style>
-/* Layout: three columns of cards (connection · interaction · sound/scene) over a status bar; collapses to one column on narrow windows. */
+/* Layout: three columns of cards (connection · interaction · sound/scene) over a status bar; collapses to one column on narrow windows.
+   Blocks marked data-only="<theme>" show only when the server runs that theme. */
 :root{
   --bg:#140b07; --card:#1f120b; --card2:#2a180e; --fg:#f3e5cb; --muted:#b39a78; --line:#4a2e1a;
   --gold:#e2b04f; --red:#8f2a1a; --green:#2f7a4a; --display:"Noto Serif",Georgia,serif; --body:"Be Vietnam Pro",system-ui,sans-serif;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
+[hidden]{display:none !important}
 body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.45 var(--body);padding:18px max(16px,env(safe-area-inset-right)) 30px max(16px,env(safe-area-inset-left))}
 header{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:baseline;justify-content:space-between;margin-bottom:14px}
 h1{font-family:var(--display);font-size:24px;margin:0;color:var(--gold)}
@@ -45,13 +47,23 @@ button.red{background:var(--red);border-color:#b84a33}
 </head>
 <body>
 <header>
-  <h1>Bảng điều khiển · Chánh Điện Tịnh Tâm</h1>
+  <h1 id="heading">Bảng điều khiển</h1>
   <div class="status">
     <span class="chip" id="srv">Server: …</span>
     <span class="chip" id="tt">TikTok: chưa kết nối</span>
     <span class="chip" id="cnt">0 người</span>
   </div>
 </header>
+
+<section class="card" style="margin-bottom:16px">
+  <h2>🎭 Chủ đề</h2>
+  <div class="row">
+    <label style="flex:2 1 0">Chủ đề<select id="themeSel"></select></label>
+    <button class="gold" id="btnTheme">Chuyển sang chủ đề này</button>
+  </div>
+  <p class="hint" id="themeDesc"></p>
+  <p class="hint">Màn hình cho OBS / TikTok LIVE Studio: <b id="stageUrl">/live/man-hinh</b>, luôn hiện chủ đề đang chạy. Chuyển chủ đề không cần khởi động lại server; cửa sổ overlay tự đổi theo, rồi bấm "bật âm thanh" lại một lần.</p>
+</section>
 
 <div class="grid">
   <section class="card">
@@ -61,7 +73,9 @@ button.red{background:var(--red);border-color:#b84a33}
     <p class="hint">Chỉ đọc sự kiện công khai của phòng live (bình luận, quà, tim). Không cần mật khẩu hay cookie TikTok. Phải bật LIVE trước rồi mới kết nối.</p>
     <button class="gold" id="btnOverlay">Mở màn hình overlay 9:16</button>
     <p class="hint">Trong TikTok LIVE Studio: Add source → Window capture → chọn cửa sổ overlay. Bấm "bật âm thanh" một lần trong cửa sổ đó.</p>
-    <h2>Trong sân chùa</h2>
+    <h2 data-only="chua" hidden>Trong sân chùa</h2>
+    <h2 data-only="hoadang" hidden>Người đã thả đèn</h2>
+    <h2 data-only="luadao" hidden>Đang trong ca · tiền lừa được</h2>
     <div id="people"><table><tbody id="peopleBody"><tr><td class="hint">Chưa có ai</td><td></td></tr></tbody></table></div>
   </section>
 
@@ -70,53 +84,104 @@ button.red{background:var(--red);border-color:#b84a33}
     <label for="simName">Tên người xem</label>
     <input id="simName" value="Minh An">
     <label for="simText">Bình luận / lời nguyện</label>
-    <input id="simText" value="Nam mô A Di Đà Phật, cầu gia đình bình an">
+    <input id="simText" value="">
     <div class="row"><button id="btnChat">Gửi bình luận</button></div>
-    <div class="row">
+    <div class="row" data-only="chua" hidden>
       <button data-gift="Hoa hồng" data-dia="1">Hoa hồng · 1</button>
       <button data-gift="Đèn hoa sen" data-dia="30">Hoa sen · 30</button>
       <button data-gift="Chuông vàng" data-dia="199">Chuông · 199</button>
     </div>
-    <p class="hint">Gõ <b>nam · nữ · sư · ni · tiểu · bà · cao tăng</b> làm bình luận để đổi hình.</p>
-    <h2>Đổ người mẫu</h2>
-    <div class="row"><button data-fill="15">15</button><button data-fill="36">36</button><button data-fill="64">64</button><button data-fill="100">100</button></div>
-    <button class="red" id="btnClear">Làm trống toàn bộ bồ đoàn</button>
+    <div class="row" data-only="hoadang luadao" hidden>
+      <label style="flex:3 1 0">Quà<select id="simGift"></select></label>
+      <label style="flex:1 1 0">Số lượng<input id="simCount" type="number" min="1" max="99" value="1"></label>
+      <button id="btnGift" class="gold">🎁 Tặng thử</button>
+    </div>
+    <p class="hint" data-only="chua" hidden>Gõ <b>nam · nữ · sư · ni · tiểu · bà · cao tăng</b> làm bình luận để đổi hình.</p>
+    <p class="hint" data-only="hoadang" hidden>Gõ <b>đỏ · vàng · hồng · xanh · tím · cam</b> làm bình luận để đổi màu đèn. Quà nào thả kiểu đèn nào nằm trong file <b>live/qua-den.txt</b>; quà không có trong file thả đèn theo giá.</p>
+    <div data-only="chua" hidden>
+      <h2>Đổ người mẫu</h2>
+      <div class="row" style="margin-top:10px"><button data-fill="15">15</button><button data-fill="36">36</button><button data-fill="64">64</button><button data-fill="100">100</button></div>
+    </div>
+    <p class="hint" data-only="luadao" hidden>Gõ <b>nam · nữ</b> làm bình luận để đổi kiểu tóc. Quà nào làm gì nằm trong file <b>live/qua-goi.txt</b>; mặc định Rose là ném gạch quản giáo.</p>
+    <div data-only="hoadang" hidden>
+      <h2>Thả đèn mẫu</h2>
+      <div class="row" style="margin-top:10px"><button data-fill="10">10</button><button data-fill="30">30</button><button data-fill="60">60</button></div>
+    </div>
+    <div data-only="luadao" hidden>
+      <h2>Cho nhân viên mẫu vào ca</h2>
+      <div class="row" style="margin-top:10px"><button data-fill="10">10</button><button data-fill="25">25</button><button data-fill="50">50</button></div>
+    </div>
+    <button class="red" id="btnClear">Làm trống</button>
     <h2>Bot tương tác mô phỏng</h2>
     <div class="row">
       <label>Số bot<input id="botN" type="number" min="1" max="100" value="12"></label>
       <label>Nhịp<select id="botPace"><option value="slow">Chậm</option><option value="mid" selected>Vừa</option><option value="fast">Nhanh</option></select></label>
       <button id="btnBots">Bật bot</button>
     </div>
-    <p class="hint">Bot chỉ chạy trên màn hình của anh, không phải người xem TikTok thật.</p>
+    <p class="hint">Bot chỉ chạy trên màn hình của anh, không phải người xem TikTok thật. Nhớ làm trống và tắt bot trước khi live thật.</p>
   </section>
 
   <section class="card">
-    <h2>3 · Giọng đọc · Nhạc · Chuông mõ</h2>
+    <h2>3 · Giọng đọc · Âm thanh</h2>
     <div class="row">
       <label>Giọng<select id="voice"><option value="vi-VN-NamMinhNeural">Nam Minh (nam)</option><option value="vi-VN-HoaiMyNeural">Hoài My (nữ)</option></select></label>
       <label>Độ trầm (Hz)<input id="pitch" type="number" step="1" value="-18"></label>
       <label>Tốc độ (%)<input id="rate" type="number" step="1" value="-20"></label>
     </div>
     <label for="sayText">Đọc thử / phát thông báo</label>
-    <textarea id="sayText">Nam mô Bổn Sư Thích Ca Mâu Ni Phật. Nguyện cầu cho tất cả chư vị Phật tử thân tâm thường an lạc, vạn sự cát tường.</textarea>
-    <div class="row"><button class="primary" id="btnSay">Phát lên live</button><button id="btnChant">Đọc kinh định kỳ ngay</button></div>
+    <textarea id="sayText"></textarea>
+    <div class="row">
+      <button class="primary" id="btnSay">Phát lên live</button>
+      <button id="btnChant" data-only="chua" hidden>Đọc kinh định kỳ ngay</button>
+      <button id="btnGlow" data-only="hoadang" hidden>✨ Sông sáng ngay</button>
+      <button id="btnGiaoban" data-only="luadao" hidden>📢 Họp giao ban ngay</button>
+    </div>
     <div class="row tight">
       <label class="check"><input type="checkbox" id="music" checked> Nhạc nền</label>
-      <label class="check"><input type="checkbox" id="mo" checked> Tiếng mõ</label>
-      <label class="check"><input type="checkbox" id="autoChant" checked> Đọc kinh tự động</label>
+      <label class="check" data-only="chua" hidden><input type="checkbox" id="mo" checked> Tiếng mõ</label>
+      <label class="check" data-only="chua" hidden><input type="checkbox" id="autoChant" checked> Đọc kinh tự động</label>
+      <label class="check" data-only="hoadang" hidden><input type="checkbox" id="water" checked> Tiếng nước</label>
+      <label class="check" data-only="hoadang" hidden><input type="checkbox" id="autoGlow" checked> Sông sáng định kỳ</label>
+      <label class="check" data-only="hoadang luadao" hidden><input type="checkbox" id="voiceGifts" checked> Đọc tên khi tặng quà</label>
+      <label class="check" data-only="hoadang" hidden><input type="checkbox" id="voiceGlow"> Đọc câu khi sông sáng</label>
+      <label class="check" data-only="luadao" hidden><input type="checkbox" id="voiceGiaoban" checked> Đọc lời giao ban</label>
+      <label class="check" data-only="luadao" hidden><input type="checkbox" id="awareness" checked> Xen lời nhắc cảnh giác lừa đảo thật</label>
     </div>
-    <div class="row">
+    <div class="row" data-only="luadao" hidden>
+      <label>Họp giao ban mỗi (phút)<input id="giaobanEveryMin" type="number" min="1" max="60" value="4"></label>
+      <label>Máu quản giáo<input id="supHp" type="number" min="30" max="1000" value="100"></label>
+    </div>
+    <div class="row" data-only="luadao" hidden>
+      <label class="check"><input type="checkbox" id="autoNap" checked> Im lặng lâu thì ngủ gật, quản giáo tới đánh thức</label>
+      <label style="flex:0 0 150px">Ngủ gật sau (phút)<input id="napMin" type="number" min="1" max="30" value="3"></label>
+    </div>
+    <div class="row" data-only="chua" hidden>
       <label>Nhịp mõ (BPM)<input id="moBpm" type="number" min="20" max="120" value="52"></label>
       <label>Đọc kinh mỗi (phút)<input id="chantEveryMin" type="number" min="1" max="60" value="3"></label>
     </div>
-    <div class="row"><button id="btnBell">🔔 Thỉnh chuông</button><button id="btnMo">Gõ mõ</button></div>
-    <h2>Cảnh</h2>
-    <label>Tên thiền đường<input id="title" value="Chánh Điện Tịnh Tâm"></label>
-    <label>Dòng phụ<input id="subtitle" value="Nam Mô A Di Đà Phật"></label>
+    <div class="row" data-only="hoadang" hidden>
+      <label>Sông sáng mỗi (phút)<input id="glowEveryMin" type="number" min="1" max="60" value="5"></label>
+    </div>
     <div class="row">
+      <button id="btnBell">🔔 <span data-only="chua" hidden>Thỉnh chuông</span><span data-only="hoadang" hidden>Rung chuông gió</span><span data-only="luadao" hidden>Loa thông báo</span></button>
+      <button id="btnMo" data-only="chua" hidden>Gõ mõ</button>
+    </div>
+    <h2>Cảnh</h2>
+    <label>Tên trên bảng<input id="title" value=""></label>
+    <label>Dòng phụ<input id="subtitle" value=""></label>
+    <div class="row" data-only="chua" hidden>
       <label>Số chỗ ngồi<select id="seatMode"><option value="auto">Tự mở rộng 24 → 100</option><option value="24">24</option><option value="36">36</option><option value="64">64</option><option value="100">100</option></select></label>
     </div>
-    <label class="check"><input type="checkbox" id="joinOnEnter"> Người vào phòng cũng được ngồi (không cần bình luận)</label>
+    <label class="check" data-only="chua luadao" hidden><input type="checkbox" id="joinOnEnter"> Người vào phòng live là được ngồi luôn (không cần bình luận)</label>
+    <div class="row" data-only="luadao" hidden>
+      <label>Số máy tính (tối đa 50)<input id="maxSeats" type="number" min="10" max="50" value="50"></label>
+    </div>
+    <div class="row" data-only="hoadang" hidden>
+      <label>Số đèn tối đa trên sông<input id="maxLanterns" type="number" min="10" max="80" value="40"></label>
+      <label>Thời gian đèn trôi (giây)<input id="driftSec" type="number" min="30" max="240" value="90"></label>
+    </div>
+    <label class="check"><input type="checkbox" id="filterText" checked> Lọc link, số điện thoại và từ cấm</label>
+    <p class="hint">Danh sách từ cấm nằm trong file <b>live/tu-cam.txt</b>, mỗi dòng một từ. Sửa xong lưu lại là có hiệu lực, không cần khởi động lại.</p>
   </section>
 </div>
 
@@ -128,23 +193,61 @@ button.red{background:var(--red);border-color:#b84a33}
 
 <script>
 const $ = id => document.getElementById(id);
-let ws = null;
+let ws = null, theme = '', overlayUrl = '/live/overlay.html';
 const send = (cmd, extra={}) => ws?.readyState===1 && ws.send(JSON.stringify({ t:'ctl', cmd, ...extra }));
 function logLine(s){ const el=$('log'); el.textContent += s + '\n'; el.scrollTop = el.scrollHeight; }
-const SETTING_IDS = ['voice','pitch','rate','music','mo','autoChant','moBpm','chantEveryMin','title','subtitle','seatMode','joinOnEnter'];
+const SETTING_IDS = ['voice','pitch','rate','music','title','subtitle','filterText',
+  'mo','autoChant','moBpm','chantEveryMin','seatMode','joinOnEnter',
+  'water','autoGlow','voiceGifts','voiceGlow','glowEveryMin','maxLanterns','driftSec',
+  'maxSeats','supHp','voiceGiaoban','awareness','giaobanEveryMin','autoNap','napMin'];
 function fillSettings(s){ for (const k of SETTING_IDS){ const el=$(k); if (!el || s[k]===undefined) continue; if (el.type==='checkbox') el.checked=!!s[k]; else el.value=s[k]; } }
 function readSettings(){ const o={}; for (const k of SETTING_IDS){ const el=$(k); o[k] = el.type==='checkbox' ? el.checked : el.type==='number' ? +el.value : el.value; } return o; }
+// texts that differ per theme: filled the first time the server tells us which theme runs
+const THEME_TEXT = {
+  chua: { sim:'Nam mô A Di Đà Phật, cầu gia đình bình an', say:'Nam mô Bổn Sư Thích Ca Mâu Ni Phật. Nguyện cầu cho tất cả chư vị Phật tử thân tâm thường an lạc, vạn sự cát tường.', clear:'Làm trống toàn bộ bồ đoàn' },
+  hoadang: { sim:'Mong gia đình luôn bình an', say:'Chúc mọi người một đêm bình yên. Bình luận để thả một chiếc đèn, gửi một điều ước cho người thương.', clear:'Xóa toàn bộ đèn' },
+  luadao: { sim:'Báo cáo sếp, em chốt được 1 đơn', say:'Loa loa loa! Toàn thể nhân viên chú ý, tập trung làm việc, chốt đơn nhanh lên!', clear:'Đuổi hết, làm lại từ đầu' },
+};
+// blocks marked data-only="a b" show for those themes only; texts that differ per theme are swapped on each switch
+function applyTheme(t){
+  const prev = THEME_TEXT[theme]; theme = t; const tx = THEME_TEXT[t] || { sim:'', say:'', clear:'Làm trống' };
+  document.querySelectorAll('[data-only]').forEach(el => el.hidden = !el.dataset.only.split(' ').includes(t));
+  if (!$('simText').value || $('simText').value === prev?.sim) $('simText').value = tx.sim;
+  if (!$('sayText').value || $('sayText').value === prev?.say) $('sayText').value = tx.say;
+  $('btnClear').textContent = tx.clear;
+}
+function setThemes(list, current){
+  const sel = $('themeSel'), keep = sel.value;
+  sel.replaceChildren(...(list || []).map(x => { const o = document.createElement('option'); o.value = x.id; o.textContent = x.name + (x.id === current ? '  (đang chạy)' : ''); o.dataset.desc = x.description || ''; return o; }));
+  sel.value = keep && [...sel.options].some(o => o.value === keep && keep !== current) ? keep : current;
+  $('themeDesc').textContent = sel.selectedOptions[0]?.dataset.desc || '';
+  $('stageUrl').textContent = `${location.origin}/live/man-hinh`;
+}
+// gift simulator (Đêm Hoa Đăng): every gift listed in qua-den.txt, plus unlisted gifts at three prices
+let simGifts = [];
+function setGiftMap(rules){
+  const keep = $('simGift').value;
+  simGifts = (rules || []).flatMap(r => r.gifts.map(g => ({ name: g.name, price: g.price || 1, label: `${g.name} · ${g.price || '?'} xu → ${r.kindName}` })));
+  simGifts.push(...[1, 30, 199].map(p => ({ name: 'Quà khác', price: p, label: `Quà không có trong danh sách · ${p} xu` })));
+  $('simGift').replaceChildren(...simGifts.map((g, i) => { const o = document.createElement('option'); o.value = i; o.textContent = g.label; return o; }));
+  if (keep && +keep < simGifts.length) $('simGift').value = keep;
+}
 const people = new Map();
 function renderPeople(){
   const tb=$('peopleBody'); tb.innerHTML='';
-  const list=[...people.values()].sort((a,b)=>b.coins-a.coins || a.name.localeCompare(b.name));
+  const score=p=>p.coins||p.money||0, money=n=>n>=1e9?`${+(n/1e9).toFixed(1)} tỷ`:`${+(n/1e6).toFixed(1)}tr`;
+  const list=[...people.values()].sort((a,b)=>score(b)-score(a) || a.name.localeCompare(b.name)).slice(0, 200);
   if (!list.length){ tb.innerHTML='<tr><td class="hint">Chưa có ai</td><td></td></tr>'; }
-  list.forEach((p,i)=>{ const tr=document.createElement('tr'); const a=document.createElement('td'); a.textContent=`${String(i+1).padStart(2,'0')}  ${p.name}`; const b=document.createElement('td'); b.textContent=p.coins? p.coins+' ✧':''; tr.append(a,b); tb.append(tr); });
+  list.forEach((p,i)=>{ const tr=document.createElement('tr'); const a=document.createElement('td'); a.textContent=`${String(i+1).padStart(2,'0')}  ${p.name}`; const b=document.createElement('td'); b.textContent=p.coins? p.coins+' ✧' : p.money? money(p.money) : ''; tr.append(a,b); tb.append(tr); });
   $('cnt').textContent = `${people.size} người`;
 }
+function remember(v){ people.delete(v.id); people.set(v.id, v); if (people.size > 400) people.delete(people.keys().next().value); renderPeople(); }
 function setTT(st){
   const el=$('tt'); el.className='chip ' + (st.status==='connected'?'ok':st.status==='error'?'bad':'');
-  el.textContent = st.status==='connected' ? `TikTok: @${st.uniqueId} ✓` : st.status==='connecting' ? `TikTok: đang kết nối @${st.uniqueId}…` : st.status==='error' ? 'TikTok: lỗi kết nối' : 'TikTok: chưa kết nối';
+  el.textContent = st.status==='connected' ? `TikTok: @${st.uniqueId} ✓` : st.status==='connecting' ? `TikTok: đang kết nối @${st.uniqueId}…`
+    : st.status==='reconnecting' ? `TikTok: mất kết nối, đang tự nối lại @${st.uniqueId}…` : st.status==='disconnected' ? 'TikTok: mất kết nối'
+    : st.status==='error' ? 'TikTok: lỗi kết nối' : 'TikTok: chưa kết nối';
+  if (st.status==='reconnecting' || st.status==='disconnected') el.className='chip bad';
 }
 function connect(){
   ws = new WebSocket(`ws://${location.host}/ws?role=control`);
@@ -152,13 +255,24 @@ function connect(){
   ws.onclose = () => { $('srv').textContent='Server: mất kết nối'; $('srv').className='chip bad'; setTimeout(connect, 2000); };
   ws.onmessage = e => {
     const m = JSON.parse(e.data);
-    if (m.t==='state'){ fillSettings(m.settings); setTT(m.tiktok); people.clear(); for (const v of m.viewers) people.set(v.id,v); renderPeople(); }
+    if (m.t==='state'){
+      if (m.theme !== theme) applyTheme(m.theme || 'chua');
+      setThemes(m.themes, m.theme);
+      overlayUrl = m.overlay || overlayUrl;
+      fillSettings(m.settings); setTT(m.tiktok);
+      $('heading').textContent = document.title = `Bảng điều khiển · ${m.settings.title}`;
+      people.clear(); for (const v of m.viewers || []) people.set(v.id,v); renderPeople();
+      if (m.giftMap) setGiftMap(m.giftMap);
+    }
+    else if (m.t==='giftmap') setGiftMap(m.giftMap);
+    else if (m.t==='settings'){ fillSettings(m.settings); $('heading').textContent = document.title = `Bảng điều khiển · ${m.settings.title}`; }
     else if (m.t==='logs'){ $('log').textContent=''; m.lines.forEach(logLine); }
     else if (m.t==='log') logLine(m.line);
     else if (m.t==='tiktok') setTT(m);
-    else if (m.t==='join'){ people.set(m.v.id,m.v); renderPeople(); }
-    else if (m.t==='leave'){ people.delete(m.id); renderPeople(); }
-    else if (m.t==='gift'){ const p=people.get(m.id); if(p){ p.coins=m.total; renderPeople(); } }
+    else if (m.t==='join' || m.t==='lantern') remember(m.v);
+    else if (m.t==='leave' || m.t==='kick'){ people.delete(m.id); renderPeople(); }
+    else if (m.t==='gift'){ if (m.v) remember(m.v); else { const p=people.get(m.id); if(p){ p.coins=m.total; renderPeople(); } } }
+    else if (m.t==='clear'){ people.clear(); renderPeople(); }
     else if (m.t==='bots') $('btnBots').textContent = m.on ? 'Tắt bot' : 'Bật bot';
   };
 }
@@ -167,14 +281,19 @@ connect();
 $('btnConnect').onclick = () => send('connect', { uniqueId: $('uid').value });
 $('uid').onkeydown = e => { if (e.key==='Enter') send('connect', { uniqueId: $('uid').value }); };
 $('btnDisconnect').onclick = () => send('disconnect');
-$('btnOverlay').onclick = () => window.open('/live/overlay.html', 'overlay916', 'width=540,height=960');
+$('btnOverlay').onclick = () => window.open('/live/man-hinh', 'overlay916', 'width=540,height=960');
+$('themeSel').onchange = () => { $('themeDesc').textContent = $('themeSel').selectedOptions[0]?.dataset.desc || ''; };
+$('btnTheme').onclick = () => { if ($('themeSel').value !== theme) send('theme', { id: $('themeSel').value }); };
+$('btnGiaoban').onclick = () => send('giaoban');
 $('btnChat').onclick = () => send('chat', { name: $('simName').value, text: $('simText').value });
 document.querySelectorAll('[data-gift]').forEach(b => b.onclick = () => send('gift', { name: $('simName').value, gift: b.dataset.gift, diamonds: +b.dataset.dia, count: 1 }));
+$('btnGift').onclick = () => { const g = simGifts[+$('simGift').value]; if (g) send('gift', { name: $('simName').value, gift: g.name, diamonds: g.price, count: Math.max(1, +$('simCount').value || 1) }); };
 document.querySelectorAll('[data-fill]').forEach(b => b.onclick = () => send('fill', { n: +b.dataset.fill }));
 $('btnClear').onclick = () => send('clear');
 $('btnBots').onclick = () => send('bots', { on: $('btnBots').textContent.includes('Bật'), n: +$('botN').value, pace: $('botPace').value });
 $('btnSay').onclick = () => send('say', { text: $('sayText').value });
 $('btnChant').onclick = () => send('chant');
+$('btnGlow').onclick = () => send('glow');
 $('btnBell').onclick = () => send('bell');
 $('btnMo').onclick = () => send('mo');
 for (const k of SETTING_IDS) $(k).addEventListener('change', () => send('settings', { settings: readSettings() }));

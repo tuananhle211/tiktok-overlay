@@ -223,6 +223,7 @@ function connect(){
     const m=JSON.parse(e.data);
     switch(m.t){
       case 'state':
+        if (m.overlay && m.overlay!==location.pathname){ location.replace(m.overlay+location.search); return; }   // the server switched theme
         Object.assign(settings,m.settings); applySettings(); startedAt=m.startedAt;
         visitors.clear(); order=[]; layout(m.cap); for (const p of m.viewers) addVisitor(p,true); updateCount(); renderMerit(); break;
       case 'settings': Object.assign(settings,m.settings); applySettings(); if (m.cap!==cap){ layout(m.cap); updateCount(); } break;

@@ -5,3 +5,5 @@ live/tts/
 .env.*
 .DS_Store
 Thumbs.db
+live/gift-icons/
+live/chu-de.txt

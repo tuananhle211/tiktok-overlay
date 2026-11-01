@@ -1,0 +1,24 @@
+# Quà nào làm gì (chủ đề Khu Tam Thái Tử, châm biếm).
+# Mỗi dòng:  tên quà, tên quà khác, ... = kiểu
+# Số trong ngoặc là giá xu (không bắt buộc). Có thể dùng mã quà thay cho tên, ví dụ  #5655 = nem-gach
+# Tên quà là tên tiếng Anh như trong ứng dụng TikTok. Khi có người tặng thật, Nhật ký ghi
+# "🎁 ... tặng <tên quà> x1 (mã ..., ... xu)"; quà nào chưa khớp thì chép tên hoặc #mã vào đây.
+# Sửa xong lưu lại là có hiệu lực sau vài giây. Thứ tự dòng là thứ tự trên bảng quà của overlay.
+#
+# Kiểu:
+#   nem-gach        ném gạch / dép vào quản giáo (trừ máu, không tính tiền). Combo ×5 ném 5 viên.
+#   hoang-tu        chốt đơn "Hoàng tử châu Phi"
+#   nft-ga          chốt đơn "NFT gà biết hát"
+#   khoa-hoc        chốt đơn "Khóa học giàu sau 1 đêm"
+#   meo-coin        chốt đơn "Sàn MèoCoin"
+#   dat-mat-trang   chốt đơn "Bán đất Mặt Trăng"
+#
+# Mỗi xu = 1 triệu "đồng lừa được" trên bảng xếp hạng và KPI. Từ 99 xu: pháo hoa, cả phòng ăn mừng.
+# Quà không có trong danh sách: dưới 10 xu là Hoàng tử châu Phi, 10–98 NFT gà, từ 99 Sàn MèoCoin.
+
+Rose (1) = nem-gach
+Finger Heart (5) = hoang-tu
+Perfume (20) = nft-ga
+Doughnut (30) = khoa-hoc
+Confetti (100) = meo-coin
+Galaxy (1000) = dat-mat-trang

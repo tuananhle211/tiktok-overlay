@@ -1,0 +1,37 @@
+# Danh sách từ cấm: mỗi dòng một từ hoặc cụm từ. Dòng bắt đầu bằng # là ghi chú.
+# Tên người xem và bình luận chứa các từ này sẽ hiện thành *** trên live.
+# Link và số điện thoại luôn bị ẩn khi bật "Lọc link, số điện thoại và từ cấm" trong bảng điều khiển.
+# Sửa xong lưu lại là có hiệu lực sau vài giây, không cần khởi động lại server.
+
+# Chửi tục
+địt
+đụ
+đéo
+lồn
+cặc
+buồi
+đĩ
+đm
+đmm
+dm
+dmm
+đcm
+dcm
+đkm
+dkm
+vcl
+vkl
+clm
+cmm
+cmn
+óc chó
+mẹ mày
+súc vật
+
+# Quảng cáo, lừa đảo hay gặp
+nhà cái
+tài xỉu
+cá cược
+nổ hũ
+kèo thơm
+vay tiền nhanh
