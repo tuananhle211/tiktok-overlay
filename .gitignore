@@ -1,9 +1,10 @@
 node_modules/
+# temporary voice files: the server empties this folder every time it starts
 live/tts/
-*.log
-.env
-.env.*
+# macOS / Windows folder junk
 .DS_Store
 Thumbs.db
-live/gift-icons/
-live/chu-de.txt
+# private keys (for example SIGN_API_KEY) if they are ever kept in a .env file, and logs
+.env
+.env.*
+*.log
