@@ -149,10 +149,10 @@ Dự án chia sẻ miễn phí. Nếu thấy hữu ích và muốn góp chút c�
 | | |
 |---|---|
 | Ngân hàng | **MB Bank** |
-| Số tài khoản | **999979798886** |
-| Chủ tài khoản | **HUYNH HUU NHAN** |
+| Số tài khoản | **0967465855** |
+| Chủ tài khoản | **LE TUAN ANH** |
 
-![QR chuyển khoản MB Bank](https://img.vietqr.io/image/MB-999979798886-compact2.png?accountName=HUYNH%20HUU%20NHAN&addInfo=Ung%20ho%20Chanh%20Dien%20Online)
+
 
 Xin cảm ơn và chúc bạn thân tâm an lạc. Nam mô A Di Đà Phật.
 
