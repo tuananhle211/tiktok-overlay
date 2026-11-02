@@ -76,6 +76,7 @@ button.red{background:var(--red);border-color:#b84a33}
     <h2 data-only="chua" hidden>Trong sân chùa</h2>
     <h2 data-only="hoadang" hidden>Người đã thả đèn</h2>
     <h2 data-only="luadao" hidden>Đang trong ca · tiền lừa được</h2>
+    <h2 data-only="zombie" hidden>Cây trong vườn</h2>
     <div id="people"><table><tbody id="peopleBody"><tr><td class="hint">Chưa có ai</td><td></td></tr></tbody></table></div>
   </section>
 
@@ -91,7 +92,7 @@ button.red{background:var(--red);border-color:#b84a33}
       <button data-gift="Đèn hoa sen" data-dia="30">Hoa sen · 30</button>
       <button data-gift="Chuông vàng" data-dia="199">Chuông · 199</button>
     </div>
-    <div class="row" data-only="hoadang luadao" hidden>
+    <div class="row" data-only="hoadang luadao zombie" hidden>
       <label style="flex:3 1 0">Quà<select id="simGift"></select></label>
       <label style="flex:1 1 0">Số lượng<input id="simCount" type="number" min="1" max="99" value="1"></label>
       <button id="btnGift" class="gold">🎁 Tặng thử</button>
@@ -106,6 +107,12 @@ button.red{background:var(--red);border-color:#b84a33}
     <div data-only="hoadang" hidden>
       <h2>Thả đèn mẫu</h2>
       <div class="row" style="margin-top:10px"><button data-fill="10">10</button><button data-fill="30">30</button><button data-fill="60">60</button></div>
+    </div>
+    <p class="hint" data-only="zombie" hidden>Gõ <b>1 · 2 · 3</b> làm bình luận để đổi loại đạn (xanh · băng · lửa). Quà nào làm gì nằm trong file <b>live/qua-zombie.txt</b>.</p>
+    <div class="row" data-only="zombie" hidden><button id="btnLike">👆 Nhấp màn hình ×10</button><button id="btnFollow">➕ Follow thử</button><button id="btnTurret">🔫 Ụ súng thử</button><button id="btnNuke">☢️ Bom thử</button></div>
+    <div data-only="zombie" hidden>
+      <h2>Trồng cây mẫu</h2>
+      <div class="row" style="margin-top:10px"><button data-fill="10">10</button><button data-fill="20">20</button><button data-fill="30">30</button></div>
     </div>
     <div data-only="luadao" hidden>
       <h2>Cho nhân viên mẫu vào ca</h2>
@@ -142,7 +149,7 @@ button.red{background:var(--red);border-color:#b84a33}
       <label class="check" data-only="chua" hidden><input type="checkbox" id="autoChant" checked> Đọc kinh tự động</label>
       <label class="check" data-only="hoadang" hidden><input type="checkbox" id="water" checked> Tiếng nước</label>
       <label class="check" data-only="hoadang" hidden><input type="checkbox" id="autoGlow" checked> Sông sáng định kỳ</label>
-      <label class="check" data-only="hoadang luadao" hidden><input type="checkbox" id="voiceGifts" checked> Đọc tên khi tặng quà</label>
+      <label class="check" data-only="hoadang luadao zombie" hidden><input type="checkbox" id="voiceGifts" checked> Đọc tên khi tặng quà</label>
       <label class="check" data-only="hoadang" hidden><input type="checkbox" id="voiceGlow"> Đọc câu khi sông sáng</label>
       <label class="check" data-only="luadao" hidden><input type="checkbox" id="voiceGiaoban" checked> Đọc lời giao ban</label>
       <label class="check" data-only="luadao" hidden><input type="checkbox" id="awareness" checked> Xen lời nhắc cảnh giác lừa đảo thật</label>
@@ -172,9 +179,19 @@ button.red{background:var(--red);border-color:#b84a33}
     <div class="row" data-only="chua" hidden>
       <label>Số chỗ ngồi<select id="seatMode"><option value="auto">Tự mở rộng 24 → 100</option><option value="24">24</option><option value="36">36</option><option value="64">64</option><option value="100">100</option></select></label>
     </div>
-    <label class="check" data-only="chua luadao" hidden><input type="checkbox" id="joinOnEnter"> Người vào phòng live là được ngồi luôn (không cần bình luận)</label>
+    <label class="check" data-only="chua luadao zombie" hidden><input type="checkbox" id="joinOnEnter"> Người vào phòng live là được ngồi luôn (không cần bình luận)</label>
     <div class="row" data-only="luadao" hidden>
       <label>Số máy tính (tối đa 50)<input id="maxSeats" type="number" min="10" max="50" value="50"></label>
+    </div>
+    <div class="row" data-only="zombie" hidden>
+      <label>Số cây tối đa (10–30)<input id="maxPlants" type="number" min="10" max="30" value="30"></label>
+    </div>
+    <div class="row" data-only="zombie" hidden>
+      <label class="check"><input type="checkbox" id="autoWilt" checked> Im lặng lâu thì cây héo rồi bị nhổ (coi như đã thoát live)</label>
+    </div>
+    <div class="row" data-only="zombie" hidden>
+      <label>Héo sau (phút)<input id="wiltMin" type="number" min="1" max="30" value="3"></label>
+      <label>Bị nhổ thêm sau (phút)<input id="uprootMin" type="number" min="1" max="30" value="2"></label>
     </div>
     <div class="row" data-only="hoadang" hidden>
       <label>Số đèn tối đa trên sông<input id="maxLanterns" type="number" min="10" max="80" value="40"></label>
@@ -199,13 +216,14 @@ function logLine(s){ const el=$('log'); el.textContent += s + '\n'; el.scrollTop
 const SETTING_IDS = ['voice','pitch','rate','music','title','subtitle','filterText',
   'mo','autoChant','moBpm','chantEveryMin','seatMode','joinOnEnter',
   'water','autoGlow','voiceGifts','voiceGlow','glowEveryMin','maxLanterns','driftSec',
-  'maxSeats','supHp','voiceGiaoban','awareness','giaobanEveryMin','autoNap','napMin'];
+  'maxSeats','supHp','voiceGiaoban','awareness','giaobanEveryMin','autoNap','napMin','maxPlants','autoWilt','wiltMin','uprootMin'];
 function fillSettings(s){ for (const k of SETTING_IDS){ const el=$(k); if (!el || s[k]===undefined) continue; if (el.type==='checkbox') el.checked=!!s[k]; else el.value=s[k]; } }
 function readSettings(){ const o={}; for (const k of SETTING_IDS){ const el=$(k); o[k] = el.type==='checkbox' ? el.checked : el.type==='number' ? +el.value : el.value; } return o; }
 // texts that differ per theme: filled the first time the server tells us which theme runs
 const THEME_TEXT = {
   chua: { sim:'Nam mô A Di Đà Phật, cầu gia đình bình an', say:'Nam mô Bổn Sư Thích Ca Mâu Ni Phật. Nguyện cầu cho tất cả chư vị Phật tử thân tâm thường an lạc, vạn sự cát tường.', clear:'Làm trống toàn bộ bồ đoàn' },
   hoadang: { sim:'Mong gia đình luôn bình an', say:'Chúc mọi người một đêm bình yên. Bình luận để thả một chiếc đèn, gửi một điều ước cho người thương.', clear:'Xóa toàn bộ đèn' },
+  zombie: { sim:'2', say:'Zombie đang tới! Thả tim thật nhiều để bắn, bình luận 1, 2, 3 để đổi đạn!', clear:'Dọn sạch vườn, về màn 1' },
   luadao: { sim:'Báo cáo sếp, em chốt được 1 đơn', say:'Loa loa loa! Toàn thể nhân viên chú ý, tập trung làm việc, chốt đơn nhanh lên!', clear:'Đuổi hết, làm lại từ đầu' },
 };
 // blocks marked data-only="a b" show for those themes only; texts that differ per theme are swapped on each switch
@@ -285,6 +303,10 @@ $('btnOverlay').onclick = () => window.open('/live/man-hinh', 'overlay916', 'wid
 $('themeSel').onchange = () => { $('themeDesc').textContent = $('themeSel').selectedOptions[0]?.dataset.desc || ''; };
 $('btnTheme').onclick = () => { if ($('themeSel').value !== theme) send('theme', { id: $('themeSel').value }); };
 $('btnGiaoban').onclick = () => send('giaoban');
+$('btnLike').onclick = () => send('like', { name: $('simName').value, n: 10 });
+$('btnFollow').onclick = () => send('follow', { name: $('simName').value });
+$('btnNuke').onclick = () => send('nuke');
+$('btnTurret').onclick = () => send('turret');
 $('btnChat').onclick = () => send('chat', { name: $('simName').value, text: $('simText').value });
 document.querySelectorAll('[data-gift]').forEach(b => b.onclick = () => send('gift', { name: $('simName').value, gift: b.dataset.gift, diamonds: +b.dataset.dia, count: 1 }));
 $('btnGift').onclick = () => { const g = simGifts[+$('simGift').value]; if (g) send('gift', { name: $('simName').value, gift: g.name, diamonds: g.price, count: Math.max(1, +$('simCount').value || 1) }); };

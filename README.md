@@ -33,9 +33,10 @@ Chưa live vẫn thử được: dùng **Thử tương tác**, **Đổ người 
 | Chánh Điện Tịnh Tâm (chánh điện, bồ đoàn, tụng kinh) | `chua` | `/live/overlay.html` |
 | Đêm Hoa Đăng (thả đèn trên sông đêm) | `hoadang` | `/live/hoadang.html` |
 | Khu Tam Thái Tử (châm biếm ổ lừa đảo) | `luadao` | `/live/luadao.html` |
+| Vườn Chống Zombie (game thủ thành) | `zombie` | `/live/zombie.html` |
 
 - **Chuyển chủ đề ngay khi đang chạy**: ô **🎭 Chủ đề** ở đầu bảng điều khiển. Không cần khởi động lại server, kết nối TikTok vẫn giữ. Cửa sổ overlay tự mở trang của chủ đề mới; bấm **Bật âm thanh** lại một lần.
-- **Server nhớ chủ đề dùng lần cuối** (file `live/chu-de.txt`). `npm start` mở lại đúng chủ đề đó; `npm run chua`, `npm run hoadang`, `npm run luadao` chọn thẳng.
+- **Server nhớ chủ đề dùng lần cuối** (file `live/chu-de.txt`). `npm start` mở lại đúng chủ đề đó; `npm run chua`, `npm run hoadang`, `npm run luadao`, `npm run zombie` chọn thẳng.
 - **Một địa chỉ cho OBS / LIVE Studio**: `http://localhost:3000/live/man-hinh`, luôn hiện chủ đề đang chạy.
 - Cài đặt của mỗi chủ đề được giữ riêng: chuyển đi rồi chuyển lại không mất (cho tới khi tắt server).
 - Trên Windows, bấm đúp `start-live.bat` để mở cả server, bảng điều khiển và màn hình 9:16.
@@ -73,11 +74,25 @@ Chủ đề **châm biếm, giả tưởng**: một phòng làm việc của ổ
 
 Cảnh phòng, cửa sổ song sắt nhìn ra thị trấn casino (biển neon chung chung, tường bao dây thép gai, chòi gác có đèn pha), bàn máy và nhân vật đều vẽ bằng code.
 
+### Người chơi làm được gì (Vườn Chống Zombie)
+
+Game thủ thành dọc: zombie đi chậm từ trên xuống, hàng rào gỗ ở dưới, sau rào là khu vườn. Hình vẽ và luật chơi là thiết kế riêng, không lấy nhân vật hay hình ảnh của game nào.
+
+- **Vào phòng live là được trồng một cây** (tối đa 30, chỉnh được 10–30), mặt cây là ảnh đại diện. Kín vườn thì người mới thay chỗ cây im lặng lâu nhất, bot và cây mẫu bị thay trước.
+- **Nhấp liên tục vào màn hình live là bắn** (trên TikTok, nhấp màn hình chính là thả tim): cây bắn đạn vào zombie gần hàng rào nhất. Nhấp dồn dập thì đạn ít đi nhưng mạnh hơn, để màn hình không rối. Trên overlay có 3 ô hướng dẫn to: nhấp màn hình = bắn, gõ 1 · 2 · 3 = đổi đạn, follow = đại bác.
+- **Bình luận `1`, `2`, `3`** đổi loại đạn, màu cánh hoa đổi theo: 1 xanh lá (sát thương thường), 2 băng (làm zombie chậm 2 giây), 3 lửa (nổ lan ra zombie bên cạnh).
+- **Follow** bắn một quả đại bác vào chỗ zombie đông nhất.
+- **Tặng quà** (file `live/qua-zombie.txt`): nâng cấp súng (tối đa cấp 5, hiện bằng ★; mỗi cấp đạn mạnh thêm 12%, cấp 5 là ×1,5, các quà khác của người đó mạnh thêm 10% mỗi cấp; mỗi cấp cây to thêm và có hào quang: cấp 2 sáng xanh lá, cấp 3 tia xanh dương, cấp 4 tia tím và đốm sáng bay quanh, cấp 5 tia vàng kép, vòng sáng dưới gốc và lấp lánh bay lên); **mưa đạn**: 3 giây đạn rơi từ trời xuống mọi zombie trên màn hình (tối đa 20 con); **pháo kích**: 3 quả đạn pháo lớn vào 3 cụm đông nhất, hất zombie lùi lại; **ụ súng liên thanh**: một ụ súng mọc lên trên hàng rào, tự bắn liên tục 25 giây (combo cộng thêm thời gian, thanh thời gian giảm dần trên đầu ụ, chỉ chạy khi có zombie nên hết màn thì để dành sang màn sau, tối đa 4 ụ cùng lúc), tổng sát thương lớn hơn cả ba quà rẻ hơn và ưu tiên bắn boss; **bom hạt nhân** quét sạch zombie trên màn hình (boss chỉ mất nửa máu). Sát thương của quà tăng theo màn và số người chơi giống như máu zombie, nên phòng đông quà vẫn mạnh như lúc vắng. Quà không có trong file: dưới 10 xu nâng cấp, 10–98 đại bác, từ 99 bom hạt nhân.
+- **Màn chơi**: thanh tiến độ đếm số zombie đã hạ. Hạ hết thì qua màn, sang màn sau zombie nhiều hơn, khỏe hơn. Zombie kéo tới từng tốp 1–3 con, giữa màn có một **đàn zombie** 6–12 con tràn vào cùng lúc. **Hàng rào vỡ thì cả vườn chơi lại từ màn 1** (bảng xếp hạng vẫn giữ). Càng nhiều người chơi, zombie càng đông và càng nhiều máu. **Cuối mỗi màn có một boss** to gấp đôi, máu rất trâu (có thanh máu riêng trên màn hình), cứ 7 giây gầm lên gọi thêm 2 zombie; màn 5, 10, 15… boss càng khỏe hơn nữa. Boss mà chạm rào là rào gần như vỡ. Người đầu tiên vào thì có 5 giây chuẩn bị để mọi người kịp vào.
+- **Các loại zombie** (xuất hiện dần theo màn): thây ma thường; zombie chạy nhanh; **zombie đội nồi** (màn 2, nồi sắt đỡ nửa sát thương cho đến khi bị bắn vỡ ở nửa máu); **dơi zombie** (màn 3, bay lượn qua lại, nhanh nhưng yếu); **zombie đô con** (màn 3, máu dày); **zombie nhảy** (màn 4, thỉnh thoảng nhảy vọt lên phía trước); **zombie bụng phệ** (màn 4, chết thì vỡ ra 3 zombie tí hon chạy nhanh); **pháp sư zombie** (màn 5, cứ 3 giây hồi máu cho zombie xung quanh, nên hạ trước).
+- **Bảng xếp hạng**: Sát thương và Tiêu diệt, chỉ tính người thật; bot và cây mẫu vẫn bắn nhưng không bao giờ lên bảng.
+- **Người đã thoát**: TikTok không báo khi ai rời live, nên cây nào 3 phút không được nhấp, bình luận hay tặng quà thì **héo** (rũ xuống, ngả nâu, 💤); thêm 2 phút nữa thì **bị nhổ khỏi vườn**, nhường chỗ. Nhấp một cái là cây tươi lại. Hai mốc thời gian chỉnh được; cây mẫu không bị héo.
+
 ### Quà nào thả đèn nào
 
 Sửa `live/qua-den.txt`, mỗi dòng `tên quà, tên quà khác = kiểu đèn`, lưu là có hiệu lực sau vài giây. Kiểu đèn: `den-giay`, `hoa-sen`, `den-troi`, `hoa-hong`, `trai-tim`, `ong-sao`, `long-tron`, `con-heo`, `den-doi`, `phao-hoa`, `mua-den`. Tên quà phải đúng như TikTok gửi về: khi có người tặng thật, Nhật ký ghi `🎁 <người> tặng <tên quà> x1 (mã …, … xu)`, chép tên (hoặc `#mã`) vào file. Dòng viết sai được báo trong Nhật ký kèm số dòng. Nút **Tặng thử** trong bảng điều khiển liệt kê đúng các quà trong file.
 
-Chủ đề Khu Tam Thái Tử dùng file riêng `live/qua-goi.txt` cùng cách viết; kiểu: `nem-gach`, `hoang-tu`, `nft-ga`, `khoa-hoc`, `meo-coin`, `dat-mat-trang`.
+Chủ đề Khu Tam Thái Tử dùng file riêng `live/qua-goi.txt` cùng cách viết; kiểu: `nem-gach`, `hoang-tu`, `nft-ga`, `khoa-hoc`, `meo-coin`, `dat-mat-trang`. Vườn Chống Zombie dùng `live/qua-zombie.txt`; kiểu: `nang-cap`, `mua-dan`, `dai-bac`, `u-sung`, `hat-nhan`.
 
 Bảng **Tặng quà · Thả đèn** bên trái overlay hiện cùng lúc mọi dòng của file: icon quà TikTok → icon đèn và tên đèn; banner tặng quà cũng dùng icon thay cho tên quà. Icon lấy từ danh sách quà công khai của TikTok (không cần tài khoản), server tự tải khi chạy, lưu 3 ngày trong `live/gift-icons/` (thư mục này không đưa lên git vì là hình của TikTok). Máy không có mạng thì bảng hiện tên quà thay cho icon.
 

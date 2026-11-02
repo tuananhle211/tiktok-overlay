@@ -193,7 +193,8 @@ async function connectTikTok(uniqueId, auto = false){
       addLog(`🎁 ${nm(d.user)} tặng ${gname} x${count} (mã ${giftId ?? '?'}, ${dia} xu)`);
     });
     conn.on(WebcastEvent.MEMBER, d => theme.member?.(uid(d.user), cleanText(nm(d.user)), av(d.user)));
-    conn.on(WebcastEvent.LIKE, d => { const id = uid(d.user); theme.like?.(id); broadcast({ t:'like', id, n: d.count || d.likeCount || 1 }); });
+    conn.on(WebcastEvent.LIKE, d => { const id = uid(d.user), n = d.count || d.likeCount || 1; theme.like?.(id, n, cleanText(nm(d.user)), av(d.user)); broadcast({ t:'like', id, n }); });
+    conn.on(WebcastEvent.FOLLOW, d => theme.follow?.(uid(d.user), cleanText(nm(d.user)), av(d.user)));
     conn.on(ControlEvent.DISCONNECTED, info => {
       if (conn !== tiktok) return;                                  // a connection we closed on purpose
       tiktok = null; tiktokState = { ...tiktokState, status: 'disconnected' }; broadcast({ t:'tiktok', ...tiktokState });
@@ -231,6 +232,7 @@ function onControl(m){
     case 'fill': theme.fill(clamp(m.n, 1, 100)); break;
     case 'clear': theme.clear(); break;
     case 'say': if (m.text) say(String(m.text).slice(0, 400), { tag:'say' }); break;
+    case 'like': { const n = String(m.name || 'Khách').slice(0, 18), id = 'sim_' + n, c = clamp(m.n, 1, 50); theme.like?.(id, c, n, ''); broadcast({ t:'like', id, n: c }); break; }
     case 'settings':
       applySettings(m.settings || {});
       theme.onSettings?.(); broadcast({ t:'settings', settings, ...theme.settingsExtra?.() }); break;
@@ -268,7 +270,8 @@ function setBots(on, n, pace){
       const ids = [...theme.people.keys()].filter(id => String(id).startsWith('bot_')); if (!ids.length) return;
       const id = pick(ids), v = theme.people.get(id), r = Math.random();
       if (r < .62) onChat(id, v.name, pick(theme.botLines));
-      else if (r < .9){ theme.like?.(id); broadcast({ t:'like', id, n: 1 + Math.floor(Math.random() * 4) }); }
+      else if (r < .9){ const n = 1 + Math.floor(Math.random() * 4); theme.like?.(id, n, v.name, ''); broadcast({ t:'like', id, n }); }
+      else if (r < .91 && theme.follow) theme.follow(id, v.name, '');
       else if (r < .985){ const [g, d] = theme.botGift?.(false) || ['Hoa hồng', 1]; onGift(id, v.name, g, 1 + Math.floor(Math.random() * 3), d); }
       else { const [g, d] = theme.botGift?.(true) || ['Đèn hoa sen', 99]; onGift(id, v.name, g, 1, d); }
     }, every);

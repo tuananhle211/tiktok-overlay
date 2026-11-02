@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "TikTok LIVE overlay server with switchable themes (Chánh Điện, Đêm Hoa Đăng, Khu Tam Thái Tử)",
-  "scripts": { "start": "node server.mjs", "chua": "node server.mjs chua", "hoadang": "node server.mjs hoadang", "luadao": "node server.mjs luadao" },
+  "description": "TikTok LIVE overlay server with switchable themes (Chánh Điện, Đêm Hoa Đăng, Khu Tam Thái Tử, Vườn Chống Zombie)",
+  "scripts": { "start": "node server.mjs", "chua": "node server.mjs chua", "hoadang": "node server.mjs hoadang", "luadao": "node server.mjs luadao", "zombie": "node server.mjs zombie" },
   "dependencies": {
     "msedge-tts": "2.1.1",
     "tiktok-live-connector": "2.5.0",

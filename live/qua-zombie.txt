@@ -1,0 +1,20 @@
+# Quà nào làm gì (chủ đề Vườn Chống Zombie).
+# Mỗi dòng:  tên quà, tên quà khác, ... = kiểu    (giá trong ngoặc và #mã quà đều không bắt buộc)
+# Sửa xong lưu lại là có hiệu lực sau vài giây. Thứ tự dòng là thứ tự trên bảng quà của overlay.
+#
+# Kiểu:
+#   nang-cap   nâng súng của cây người tặng lên 1 cấp (tối đa cấp 5, combo ×3 lên 3 cấp). Mỗi cấp đạn mạnh thêm 12%
+#              (cấp 5 = ×1,5), các quà khác của người đó mạnh thêm 10% mỗi cấp.
+#   mua-dan    mưa đạn: 3 giây đạn rơi từ trên trời xuống mọi zombie trên màn hình (combo ×2 thêm 3 giây…)
+#   dai-bac    pháo kích: 3 quả đạn pháo lớn vào 3 cụm zombie đông nhất, hất văng zombie lùi lại (combo bắn thêm loạt)
+#   u-sung     ụ súng liên thanh trên hàng rào, tự bắn liên tục 25 giây (combo ×2 = 50 giây…), mạnh nhất sau bom.
+#              Đồng hồ chỉ chạy khi có zombie, hết màn thì để dành sang màn sau. Tối đa 4 ụ cùng lúc.
+#   hat-nhan   bom hạt nhân: quét sạch zombie trên màn hình (boss chỉ mất một nửa máu)
+#
+# Quà không có trong danh sách: dưới 10 xu nâng cấp súng, 10–98 đại bác, từ 99 bom hạt nhân.
+
+Rose (1) = nang-cap
+Finger Heart (5) = mua-dan
+Perfume (20) = dai-bac
+Doughnut (30) = u-sung
+Confetti (100) = hat-nhan
